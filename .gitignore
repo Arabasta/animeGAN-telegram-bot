@@ -1,0 +1,33 @@
+# General
+*.log
+*.tmp
+*.swp
+*.bak
+.DS_Store
+.vscode/
+.idea/
+.env
+
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.venv/
+env/
+venv/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Docker
+*.dockerfile
+*.dockerignore
+
+# Specific folders (adjust paths as necessary)
+ml/models/
+db_seeding/seed_data.csv
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
