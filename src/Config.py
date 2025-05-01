@@ -11,3 +11,5 @@ class Config:
         "hayao": "../model/AnimeGANv3_Hayao_36.onnx",
         "shinkai": "../model/AnimeGANv3_Shinkai_37.onnx"
     }
+    DEFAULT_MODEL = "hayao"
+    IS_STATELESS = False  # set to True for serverless (lambda) deployment

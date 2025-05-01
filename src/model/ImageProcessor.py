@@ -1,9 +1,6 @@
 import cv2
 import numpy as np
 import onnxruntime as ort
-from typing import Literal
-
-ModelType = Literal["hayao", "shinkai"]
 
 
 class ImageProcessor:
@@ -13,13 +10,13 @@ class ImageProcessor:
             for model, path in model_paths.items()
         }
 
-    def convert_to_anime(self, input_path: str, output_path: str, model_type: ModelType):
+    def convert_to_anime(self, input_path: str, output_path: str, model_type: str):
         if model_type not in self.models:
             raise ValueError(f"Invalid model type: {model_type}")
 
         # read image
         image = cv2.imread(input_path)
-        original_shape = image.shape[:2] # save original dimensions
+        original_shape = image.shape[:2]  # save original dimensions
 
         input_image = self._preprocess(image)
 
