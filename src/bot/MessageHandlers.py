@@ -2,11 +2,13 @@ from telegram import Update
 from src.Config import Config
 from src.state.UserModel import UserModelManager
 import os
-import logging
+
+from src.util.Logger import LoggerFactory
 
 
 class MessageHandlers:
     def __init__(self, bot, converter, user_model_manager: UserModelManager):
+        self.log = LoggerFactory.get_logger(self.__class__.__name__)
         self.bot = bot
         self.converter = converter
         self.user_model_manager = user_model_manager
@@ -14,6 +16,7 @@ class MessageHandlers:
     async def handle_photo(self, update: Update):
         chat_id = update.message.chat.id
         try:
+            self.log.info(f"Processing image for chat {chat_id}")
             await self.bot.send_message(chat_id, "Processing image...")
 
             photo = update.message.photo[-1]  # max resolution
@@ -30,7 +33,7 @@ class MessageHandlers:
                     caption=f"Converted using {model} model")
         except Exception as e:
             await self.bot.send_message(chat_id, f"Error processing image: {str(e)}")
-            logging.error(f"Image processing failed for {chat_id}: {str(e)}")
+            self.log.error(f"Image processing failed for {chat_id}: {str(e)}", exc_info=True)
 
         finally:
             if 'output_path' in locals() and os.path.exists(output_path):
@@ -40,14 +43,16 @@ class MessageHandlers:
         text = update.message.text.lower().strip()
         chat_id = update.message.chat.id
 
-        if text == '/hayao':
+        if text == '/hayao' or text == 'ghibli':
             await self._switch_model(chat_id, "hayao")
-        elif text == '/shinkai':
+        elif text == '/shinkai' or text == 'yourname':
             await self._switch_model(chat_id, "shinkai")
         elif text == '/current' or text == '/default':
             await self._show_current_model(chat_id)
         elif text == '/help':
             await self._send_help(chat_id)
+        elif text == '/start':
+            await self.bot.send_message(chat_id, "Welcome! Send me a photo to convert to anime style.")
         else:
             await self.default_message(chat_id)
 
